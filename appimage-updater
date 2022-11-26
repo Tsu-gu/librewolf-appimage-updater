@@ -1,0 +1,24 @@
+#!/bin/bash
+name=$(whoami)
+wget https://gitlab.com/librewolf-community/browser/source/-/raw/main/version
+version=$(cat version)
+oldver=$(cat /home/$name/.config/librewolf-version)
+echo "================================================================================================"
+echo "The latest version of librewolf is $version. Your latest installed version seems to be $oldver"
+echo "================================================================================================"
+echo "Do you want to proceed? [y/n]"
+read choice
+if [ "$choice" == "y" ];
+then
+	touch /home/$name/.config/librewolf-version
+    wget https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/$version-1/LibreWolf.x86_64.AppImage
+	rm /home/$name/Apps/LibreWolf.AppImage
+	cp LibreWolf.x86_64.AppImage /home/$name/Apps/LibreWolf.AppImage
+	chmod +x /home/$name/Apps/LibreWolf.AppImage
+	echo $version > /home/$name/.config/librewolf-version
+	rm version
+else
+	echo "Ok. Shutting down."
+	sleep 2
+fi
+
